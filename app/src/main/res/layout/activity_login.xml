@@ -57,6 +57,7 @@
     <EditText
         android:id="@+id/usernameId"
         android:hint="email"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_width="@dimen/editText_horizontal_size"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"

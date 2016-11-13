@@ -11,7 +11,56 @@
     tools:context="com.julienbirabent.coopmanager.LoginActivity">
 
     <TextView
+        android:id="@+id/signinTextId"
+        android:text="Sign in"
+        android:layout_centerVertical="false"
+        android:layout_centerHorizontal="true"
+        android:textSize="30sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/passwordId"
+        android:layout_below="@+id/usernameId"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:hint="password"
+
+        android:layout_marginTop="10dp"
+        android:inputType="textPassword"
+        android:layout_width="@dimen/editText_horizontal_size"
+        android:layout_height="wrap_content"
+        tools:password="false"
+        android:shadowColor="@color/colorPrimary"
+        android:textCursorDrawable="@android:color/holo_orange_dark" />
+    <Button
+        android:id="@+id/signinButton"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/passwordId"
+        android:layout_marginTop="50dp"
+        android:layout_width="200dp"
+        android:text="Go"
+        android:textStyle="italic"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/bookIconId"
+        android:src="@mipmap/ic_book"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_below="@+id/signinTextId"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="23dp"
+        android:adjustViewBounds="true" />
+
+    <EditText
+        android:id="@+id/usernameId"
+        android:hint="email"
+        android:layout_width="@dimen/editText_horizontal_size"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:layout_below="@+id/bookIconId"
+        android:layout_alignLeft="@+id/passwordId"
+        android:layout_alignStart="@+id/passwordId" />
 </RelativeLayout>

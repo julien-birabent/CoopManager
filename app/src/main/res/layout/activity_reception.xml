@@ -33,7 +33,6 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textHint="Type the parameters"
         android:textColorHint="@android:color/darker_gray"
         android:layout_marginTop="11dp"
         android:id="@+id/editText_search"

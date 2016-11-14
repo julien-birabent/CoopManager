@@ -13,9 +13,9 @@ import android.widget.ListView;
 
 public class ActivityReception extends AppCompatActivity {
 
-    Button searchButton;
-    ListView bookList;
-    EditText searchBar;
+    private  Button searchButton;
+    private  ListView bookList;
+    private  EditText searchBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

@@ -28,7 +28,7 @@
 
         android:layout_marginTop="10dp"
         android:inputType="textPassword"
-        android:layout_width="@dimen/editText_horizontal_size"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:password="false"
         android:shadowColor="@color/colorPrimary"
@@ -58,7 +58,7 @@
         android:id="@+id/usernameId"
         android:hint="email"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_width="@dimen/editText_horizontal_size"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:layout_below="@+id/bookIconId"

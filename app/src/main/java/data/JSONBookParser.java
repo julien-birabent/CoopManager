@@ -15,6 +15,13 @@ import utils.JSONUtils;
 
 public class JSONBookParser {
 
+    public final static String ID = String.valueOf('$')+"oid";
+    public final static String BOOK_ID = "id";
+    public final static String AUTHOR = "author";
+    public final static String TITLE = "title";
+    public final static String ISBN ="isbn";
+    public final static String PAGE_COUNT = "page_count";
+    public final static String MINT_PRICE = "mint_price";
 
     public JSONBookParser() {
     }
@@ -24,20 +31,23 @@ public class JSONBookParser {
      * @param contents
      * @return
      */
-    public static Book parseBook(String contents)
+    public  Book parseBook(String contents)
     {
         Book book = new Book();
 
         try {
 
-            // On convertit la chaîne de caractère représentant l'objetJSON en objet JSON
+            // On convertit la chaîne de caractère représentant l'objet JSON en objet JSON
             JSONObject objBook = new JSONObject(contents);
             // On remplit les champs de l'instance de Book avant de la retourner
-            book.setAuthor(JSONUtils.getString("author", objBook));
-            book.setTitle(JSONUtils.getString("title",objBook));
-            book.setIsbn(JSONUtils.getInt("isbn",objBook));
-            book.setNbPages(JSONUtils.getInt("page_count",objBook));
-            book.setPrice(JSONUtils.getFloat("mint_price",objBook));
+            book.setAuthor(JSONUtils.getString(AUTHOR, objBook));
+            book.setTitle(JSONUtils.getString(TITLE,objBook));
+            book.setIsbn(JSONUtils.getString(ISBN,objBook));
+            book.setNbPages(JSONUtils.getString(PAGE_COUNT,objBook));
+            book.setPrice(JSONUtils.getString(MINT_PRICE,objBook));
+            // On va chercher l'id du livre
+            JSONObject objIdBook = JSONUtils.getObject(BOOK_ID,objBook);
+            book.setBookId(JSONUtils.getString(ID,objIdBook));
 
             return book;
         }
@@ -53,7 +63,7 @@ public class JSONBookParser {
      * @param contents
      * @return
      */
-    public static ArrayList<Book> parseManyBooks(String contents){
+    public  ArrayList<Book> parseManyBooks(String contents){
 
         ArrayList<Book> bookArrayList = new ArrayList<Book>();
         try {
@@ -61,7 +71,7 @@ public class JSONBookParser {
             JSONArray booksArray = new JSONArray(contents);
             // Pour chaque description de Book, on créé un Book physique
             for(int i =0; i<booksArray.length();i++){
-                parseBook(booksArray.get(i).toString());
+                bookArrayList.add(parseBook(booksArray.get(i).toString())) ;
             }
 
             return bookArrayList;

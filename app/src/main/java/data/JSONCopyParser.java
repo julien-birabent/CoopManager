@@ -20,6 +20,7 @@ public class JSONCopyParser {
     public final static String COPY_ID = "id";
     public final static String INTEGRITY ="integrity";
     public final static String ID = String.valueOf('$')+"oid";
+    public final static String AVAILABILITY = "availability";
 
     public JSONCopyParser() {
 
@@ -51,6 +52,7 @@ public class JSONCopyParser {
             copy.setCopyId(JSONUtils.getString(ID,objCopyId));
 
             copy.setPhysicalState(JSONUtils.getString(INTEGRITY,objCopy));
+            copy.setAvailability(JSONUtils.getString(AVAILABILITY,objCopy));
             return copy;
 
         }

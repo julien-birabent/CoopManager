@@ -8,6 +8,8 @@ package utils;
 
 public class HttpUtils {
 
+    public final static String CODE_OK ="200";
+
     public final static String SERVER_URL = "http://104.236.210.211:3000/";
     public final static String LAST_COPIE = "copies/last.json";
 

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import data.JSONBookParser;
+import model.Manager;
 
 /**
  * Created by Julien on 2016-11-13.
@@ -17,13 +18,41 @@ public class MainActivity  extends AppCompatActivity {
     Button receptionButton;
     Button pickingButton;
 
+    private  static   Manager sessionManager = new Manager();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
+
+    }
+
+    private void initActivity(){
+        findViewsById();
+
+        // On récupère les attributs du manager qui se connecte à l'application
+        // contenues dans l'intent envoyé par LoginActivity
+        Intent intent = getIntent();
+        sessionManager.setEmail(intent.getStringExtra(LoginActivity.USER_NAME));
+        sessionManager.setPassword(intent.getStringExtra(LoginActivity.TOKEN));
+        sessionManager.setId(intent.getStringExtra(LoginActivity.COOPMANAGER_ID));
+
+    }
+
+    private void findViewsById(){
         receptionButton = (Button) findViewById(R.id.reception_button);
         pickingButton = (Button) findViewById(R.id.picking_button);
+    }
 
+    public static Manager getSessionManager(){
+
+        if(sessionManager == null){
+            sessionManager = new Manager();
+        }
+        return sessionManager;
     }
 
 

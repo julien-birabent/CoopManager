@@ -19,13 +19,15 @@ public class HttpUtils {
     public final static String COPIES = "copies/";
 
     public final static String STUDENT_PARAM ="student_email=";
-    public final static String MANAGER_PARAM ="coopmanager_email=";
     public final static String STUDENT_TOKEN_PARAM ="student_token=";
-    public final static String MANAGER_TOKEN_PARAM ="coopmanager_token=";
     public final static String STUDENT = "student=";
 
     public final static String AND = "&";
     public final static String JSON = ".json";
+
+
+    public final static String COOPMANAGER_EMAIL ="coopmanager_email=";
+    public final static String COOPMANAGER_TOKEN ="coopmanager_token=";
 
 
 

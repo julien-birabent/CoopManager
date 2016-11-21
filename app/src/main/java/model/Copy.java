@@ -72,6 +72,7 @@ public class Copy {
                 "copyId='" + copyId + '\'' +
                 ", bookId='" + bookId + '\'' +
                 ", physicalState='" + physicalState + '\'' +
+                ", availability= '" + availability +
                 '}';
     }
 }

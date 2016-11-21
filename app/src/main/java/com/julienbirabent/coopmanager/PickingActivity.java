@@ -24,8 +24,8 @@ public class PickingActivity extends AppCompatActivity {
     private ListView bookList;
     private EditText searchBar;
 
-    private ArrayAdapter<String> bookListAdapter ;
-    private ArrayList<String> booksString = new ArrayList<String>();
+    private ArrayAdapter<String> copiesToPickAdapter ;
+    private ArrayList<String> copiesToPick = new ArrayList<String>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,11 +47,11 @@ public class PickingActivity extends AppCompatActivity {
 
         for(int i = 0; i<books.size();i++){
 
-            booksString.set(i,books.get(i).toString());
+            copiesToPick.set(i,books.get(i).toString());
         }
 
-        this.bookListAdapter = new ArrayAdapter<String>(this,R.layout.book_item,booksString);
-        this.getBookList().setAdapter(this.bookListAdapter);
+        this.copiesToPickAdapter = new ArrayAdapter<String>(this,R.layout.book_item,copiesToPick);
+        this.getBookList().setAdapter(this.copiesToPickAdapter);
 
     }
 
@@ -109,23 +109,19 @@ public class PickingActivity extends AppCompatActivity {
         this.searchBar = searchBar;
     }
 
-    public ArrayAdapter<String> getBookListAdapter() {
-        return bookListAdapter;
+    public ArrayAdapter<String> getCopiesToPickAdapter() {
+        return copiesToPickAdapter;
     }
 
-    public void setBookListAdapter(ArrayAdapter<String> bookListAdapter) {
-        this.bookListAdapter = bookListAdapter;
+    public void setCopiesToPickAdapter(ArrayAdapter<String> copiesToPickAdapter) {
+        this.copiesToPickAdapter = copiesToPickAdapter;
     }
 
-    public ArrayList<String> getBooksString() {
-        return booksString;
+    public ArrayList<String> getCopiesToPick() {
+        return copiesToPick;
     }
 
-    public void setBooksString(ArrayList<String> booksString) {
-        this.booksString = booksString;
+    public void setCopiesToPick(ArrayList<String> copiesToPick) {
+        this.copiesToPick = copiesToPick;
     }
-
-
-
-
 }

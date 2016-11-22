@@ -22,6 +22,11 @@ public class Copy {
         this.physicalState = physicalState;
     }
 
+    public Copy(String availability, String physicalState) {
+        this.availability = availability;
+        this.physicalState = physicalState;
+    }
+
     public Copy(){
 
     }

@@ -4,10 +4,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -33,16 +39,38 @@ public class PickingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picking);
 
+        findViewsById();
+        setListeners();
+
+        ArrayList<Book> booksTest = new ArrayList<Book>();
+        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
+        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
+
+        fillBookListView(booksTest);
+
+
+    }
+
+    private void findViewsById(){
         searchButton = (Button) findViewById(R.id.button_search_picking);
         bookList = (ListView) findViewById(R.id.listView_picking);
         searchBar = (EditText) findViewById(R.id.editText_search_picking);
 
-        ArrayList<Book> booksTest = new ArrayList<Book>();
-        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
+    }
 
-       fillBookListView(booksTest);
+    private void setListeners(){
+        bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                // Notre liste contient exclusivement des TextView,
+                // En fesant ca on récupère donc le TextView selectionné.
+                TextView tv = (TextView) view;
+                Toast.makeText(getApplicationContext(), tv.getText().toString(), Toast.LENGTH_LONG).show();
 
+            }
+
+        });
     }
 
     /**

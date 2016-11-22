@@ -37,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                testGoToStudentActivity();
                 // On essaye de se connecter au serveur
                 LoginTask loginTask = new LoginTask();
                 loginTask.execute(new String[]{buildAthentificationUrl()});

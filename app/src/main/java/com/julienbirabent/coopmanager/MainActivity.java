@@ -29,6 +29,7 @@ public class MainActivity  extends AppCompatActivity {
 
     private void initActivity(){
         findViewsById();
+        setOnClickListener();
 
         // On récupère les attributs du manager qui se connecte à l'application
         // contenues dans l'intent envoyé par LoginActivity

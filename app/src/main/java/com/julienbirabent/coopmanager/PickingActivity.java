@@ -12,6 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import model.Book;
+import model.Copy;
 
 
 /**
@@ -36,6 +37,12 @@ public class PickingActivity extends AppCompatActivity {
         bookList = (ListView) findViewById(R.id.listView_picking);
         searchBar = (EditText) findViewById(R.id.editText_search_picking);
 
+        ArrayList<Book> booksTest = new ArrayList<Book>();
+        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
+
+       fillBookListView(booksTest);
+
+
     }
 
     /**
@@ -45,11 +52,14 @@ public class PickingActivity extends AppCompatActivity {
      */
     public void fillBookListView(ArrayList<Book> books){
 
+        // On reset notre liste contenant les description d'item à afficher.
+        copiesToPick.clear();
+
         for(int i = 0; i<books.size();i++){
 
-            copiesToPick.set(i,books.get(i).toString());
-        }
+            copiesToPick.add(books.get(i).toString());
 
+        }
         this.copiesToPickAdapter = new ArrayAdapter<String>(this,R.layout.book_item,copiesToPick);
         this.getBookList().setAdapter(this.copiesToPickAdapter);
 

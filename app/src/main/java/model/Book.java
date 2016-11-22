@@ -21,6 +21,15 @@ public class Book {
 
     }
 
+    public Book(String isbn, String author, String title, String price, String nbPages, Copy copy) {
+        this.isbn = isbn;
+        this.author = author;
+        this.title = title;
+        this.price = price;
+        this.nbPages = nbPages;
+        this.copy = copy;
+    }
+
     public String getBookId() {
         return bookId;
     }

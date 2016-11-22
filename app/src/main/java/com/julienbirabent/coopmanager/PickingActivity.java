@@ -1,5 +1,9 @@
 package com.julienbirabent.coopmanager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -67,6 +71,8 @@ public class PickingActivity extends AppCompatActivity {
                 // En fesant ca on récupère donc le TextView selectionné.
                 TextView tv = (TextView) view;
                 Toast.makeText(getApplicationContext(), tv.getText().toString(), Toast.LENGTH_LONG).show();
+                PickingDialog pickingDialog = new PickingDialog(view.getContext());
+
 
             }
 
@@ -93,7 +99,38 @@ public class PickingActivity extends AppCompatActivity {
 
     }
 
-    private class GetPickingListTask extends AsyncTask<String,String,ArrayList<Book>>{
+    /**
+     * Dialogue permettant de demander au manager si oui ou non il veut retirer une copie de la liste
+     * des copies en attente de ceuillette.
+     */
+    protected class PickingDialog extends Dialog{
+
+        public PickingDialog(Context context) {
+
+            super(context);
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_POSITIVE:
+                            //Yes button clicked
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Do you want this copy to be remove from the picking list ?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
+    }
+
+    protected class GetPickingListTask extends AsyncTask<String,String,ArrayList<Book>>{
 
         @Override
         protected ArrayList<Book> doInBackground(String... params) {

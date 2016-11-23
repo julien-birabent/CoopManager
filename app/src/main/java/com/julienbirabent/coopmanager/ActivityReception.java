@@ -11,10 +11,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -50,6 +53,32 @@ public class ActivityReception extends AppCompatActivity {
 
     private void setListeners(){
 
+        getSearchButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkInternetConnection()){
+                    // Récupérer la liste des copies en attente de réception.
+                    // http://url_serveur/copies.json?availability=waiting_for_reception
+
+                }
+            }
+        });
+
+        getBookList().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // Notre liste contient exclusivement des TextView,
+                // En fesant ca on récupère donc le TextView selectionné.
+                TextView tv = (TextView) view;
+                // On récupère l'objet Book qui a été sélectionné dans la liste afin de disposer
+                // de toutes ses informations.
+                Book bookSelected = getLastBooksFetched().get(position);
+                // On ouvre le dialogue pour savoir si le manager veut retirer cette copie de la
+                // liste des copies de la coop
+                ReceptionDialog pickingDialog = new ReceptionDialog(view.getContext(), bookSelected);
+            }
+        });
 
     }
 
@@ -110,8 +139,6 @@ public class ActivityReception extends AppCompatActivity {
      */
     protected class ReceptionDialog extends Dialog {
 
-
-
         public ReceptionDialog(Context context, final Book bookSelected) {
 
             super(context);
@@ -119,11 +146,12 @@ public class ActivityReception extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
-                        // Si oui, on envoie une requête au serveur avec l'id de la copie à supprimer
-                        // pour que celui-ci supprime la copie en question de la base de donnée.
+                        // Si oui, on envoie une requête au serveur avec l'id de la copie à modifier
+                        // pour que celui-ci modifie l'état en cours de la copie à available
                         case DialogInterface.BUTTON_POSITIVE:
                             if(checkInternetConnection()) {
-
+                                // Ici on envoie la requête serveur pour changer l'état de disponibilité
+                                // de la copie sélectionné par le manager.
                             }
                             break;
 

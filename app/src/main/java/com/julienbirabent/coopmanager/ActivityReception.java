@@ -4,13 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import model.Book;
 import model.Manager;
 
 /**
@@ -23,6 +29,10 @@ public class ActivityReception extends AppCompatActivity {
     private  ListView bookList;
     private  EditText searchBar;
 
+    // Dernière liste de livre récupérée depuis le serveur
+    private ArrayList<Book> lastBooksFetched  = new ArrayList<Book>();
+    private ArrayAdapter<String> listViewAdapter ;
+    private ArrayList<String> descriptionToDisplay = new ArrayList<String>();
 
 
     @Override
@@ -34,6 +44,11 @@ public class ActivityReception extends AppCompatActivity {
 
     }
 
+    private void setListeners(){
+
+    }
+
+
     private void findViewsById(){
         searchButton = (Button) findViewById(R.id.button_search_reception);
         bookList = (ListView) findViewById(R.id.listView_reception);
@@ -43,6 +58,7 @@ public class ActivityReception extends AppCompatActivity {
     private void initActivity(){
 
         findViewsById();
+        setListeners();
 
     }
 
@@ -61,6 +77,49 @@ public class ActivityReception extends AppCompatActivity {
 
         return isConnected;
 
+    }
+
+    /**
+     * Tâches asynchrone ayant pour mission de récupérer la liste des copies en attente de
+     * réception à la coopérative.
+     */
+    protected class GetReceptionListTask extends AsyncTask<String,String,ArrayList<Book>>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected ArrayList<Book> doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Book> books) {
+            super.onPostExecute(books);
+        }
+    }
+
+    /**
+     * Tâche ayant pour but de changer l'attribut availability d'une copie en attente de réception.
+     */
+    protected class ChangeCopyAvailityTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
     }
 
     public Button getSearchButton() {

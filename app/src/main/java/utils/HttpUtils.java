@@ -31,6 +31,8 @@ public class HttpUtils {
     public final static String COOPMANAGER_EMAIL ="coopmanager_email=";
     public final static String COOPMANAGER_TOKEN ="coopmanager_token=";
 
+    public final static String WAITING_FOR_RECEPTION ="waiting_for_reception";
+
 
 
 }

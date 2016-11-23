@@ -21,8 +21,12 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+import data.BookHttpClient;
+import data.JSONBookParser;
+import data.JSONCopyParser;
 import model.Book;
 import model.Copy;
+import utils.HttpUtils;
 
 
 /**
@@ -35,6 +39,8 @@ public class PickingActivity extends AppCompatActivity {
     private ListView bookList;
     private EditText searchBar;
 
+    // Dernière liste de livre récupérée depuis le serveur
+    private ArrayList<Book> lastBooksFetched  = new ArrayList<Book>();
     private ArrayAdapter<String> copiesToPickAdapter ;
     private ArrayList<String> copiesToPick = new ArrayList<String>();
 
@@ -46,11 +52,11 @@ public class PickingActivity extends AppCompatActivity {
         findViewsById();
         setListeners();
 
-        ArrayList<Book> booksTest = new ArrayList<Book>();
-        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
-        booksTest.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
 
-        fillBookListView(booksTest);
+        lastBooksFetched.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
+        lastBooksFetched.add(new Book("isbn2", "author2", "title2","price2","nb page2", new Copy("Neuf","Attente reception")));
+
+        fillBookListView(lastBooksFetched);
 
 
     }
@@ -70,8 +76,12 @@ public class PickingActivity extends AppCompatActivity {
                 // Notre liste contient exclusivement des TextView,
                 // En fesant ca on récupère donc le TextView selectionné.
                 TextView tv = (TextView) view;
-                Toast.makeText(getApplicationContext(), tv.getText().toString(), Toast.LENGTH_LONG).show();
-                PickingDialog pickingDialog = new PickingDialog(view.getContext());
+                // On récupère l'objet Book qui a été sélectionné dans la liste afin de disposer
+                // de toutes ses informations.
+                Book bookSelected = getLastBooksFetched().get(position);
+                // On ouvre le dialogue pour savoir si le manager veut retirer cette copie de la
+                // liste des copies de la coop
+                PickingDialog pickingDialog = new PickingDialog(view.getContext(), bookSelected);
 
 
             }
@@ -105,13 +115,17 @@ public class PickingActivity extends AppCompatActivity {
      */
     protected class PickingDialog extends Dialog{
 
-        public PickingDialog(Context context) {
+
+
+        public PickingDialog(Context context, Book bookSelected) {
 
             super(context);
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which){
+                        // Si oui, on envoie une requête au serveur avec l'id de la copie à supprimer
+                        // pour que celui-ci supprime la copie en question de la base de donnée.
                         case DialogInterface.BUTTON_POSITIVE:
                             //Yes button clicked
                             break;
@@ -135,12 +149,32 @@ public class PickingActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Book> doInBackground(String... params) {
 
+
+
+            ArrayList<Copy> copiesArrayList = new ArrayList<Copy>();
             ArrayList<Book> bookArrayList = new ArrayList<Book>();
+            JSONBookParser jsonBookParser = new JSONBookParser();
+            // On récupère toutes les copies en attente de reception
+            BookHttpClient bookHttpClient = new BookHttpClient();
 
-            // Ici faire le code pour récupérer la liste correspondant aux paramètres de la
-            // demande serveur.
+            // http://URL_SERVER:3000/copies.json?availability=waiting_for_reception
+            String allCopies = bookHttpClient.sendGet(params[0]);
 
 
+            // On convertit les Copy format JSON en objet Copy
+            JSONCopyParser jsonCopyParser = new JSONCopyParser();
+            copiesArrayList = jsonCopyParser.parseManyCopies(allCopies);
+            // Pour chaque copie, on fait une requête dans la BD pour trouver le Book associé
+            // On convertit la description JSON du Book en objet Book et on associe la Copy à ce Book
+            for(int i= 0 ;i<copiesArrayList.size();i++){
+                // http://url_serveur/books/*id_copy*.json
+                String stringBook = bookHttpClient.sendGet(HttpUtils.SERVER_URL + HttpUtils.BOOKS
+                        + copiesArrayList.get(i).getBookId() + HttpUtils.JSON);
+
+                Book book = jsonBookParser.parseBook(stringBook);
+                book.setCopy(copiesArrayList.get(i));
+                bookArrayList.add(book);
+            }
             return bookArrayList;
         }
 
@@ -151,10 +185,34 @@ public class PickingActivity extends AppCompatActivity {
             // après avoir récupéré la liste de livre corespondant à la recherche via le serveur, on définit
             // cette liste comme la liste a afficher.
             if(books!=null) {
+                // On sauvegarde la dernière liste fetched du serveur
+                setLastBooksFetched(books);
+                // On remplis la listeView contenant les descriptions des bouquins
                 fillBookListView(books);
             }
 
 
+        }
+    }
+
+    /**
+     * Tâche asynchrone en charge de supprimer une copie de la base de donnée liée au serveur.
+     */
+    protected class RemoveCopyTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
         }
     }
 
@@ -198,5 +256,13 @@ public class PickingActivity extends AppCompatActivity {
 
     public void setCopiesToPick(ArrayList<String> copiesToPick) {
         this.copiesToPick = copiesToPick;
+    }
+
+    public ArrayList<Book> getLastBooksFetched() {
+        return lastBooksFetched;
+    }
+
+    public void setLastBooksFetched(ArrayList<Book> lastBooksFetched) {
+        this.lastBooksFetched = lastBooksFetched;
     }
 }

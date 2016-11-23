@@ -1,6 +1,9 @@
 package com.julienbirabent.coopmanager;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +21,7 @@ import java.util.ArrayList;
 
 import model.Book;
 import model.Manager;
+import utils.HttpUtils;
 
 /**
  * Created by Julien on 2016-11-13.
@@ -46,6 +50,7 @@ public class ActivityReception extends AppCompatActivity {
 
     private void setListeners(){
 
+
     }
 
 
@@ -59,6 +64,26 @@ public class ActivityReception extends AppCompatActivity {
 
         findViewsById();
         setListeners();
+
+    }
+
+    /**
+     * Remplis la liste des livres à partir d'une ArrayList<String> contenant les descrptions des
+     * livres
+     * @param books
+     */
+    public void fillBookListView(ArrayList<Book> books){
+
+        // On reset notre liste contenant les description d'item à afficher.
+        descriptionToDisplay.clear();
+
+        for(int i = 0; i<books.size();i++){
+
+            descriptionToDisplay.add(books.get(i).toString());
+
+        }
+        this.listViewAdapter = new ArrayAdapter<String>(this,R.layout.book_item,descriptionToDisplay);
+        this.getBookList().setAdapter(this.listViewAdapter);
 
     }
 
@@ -77,6 +102,43 @@ public class ActivityReception extends AppCompatActivity {
 
         return isConnected;
 
+    }
+
+    /**
+     * Dialogue permettant de demander au manager si oui ou non il veut retirer une copie de la liste
+     * des copies en attente de ceuillette.
+     */
+    protected class ReceptionDialog extends Dialog {
+
+
+
+        public ReceptionDialog(Context context, final Book bookSelected) {
+
+            super(context);
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        // Si oui, on envoie une requête au serveur avec l'id de la copie à supprimer
+                        // pour que celui-ci supprime la copie en question de la base de donnée.
+                        case DialogInterface.BUTTON_POSITIVE:
+                            if(checkInternetConnection()) {
+
+                            }
+                            break;
+
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            //No button clicked
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setMessage("Do you want to confirm the reception of this copy ?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
     }
 
     /**
@@ -146,4 +208,27 @@ public class ActivityReception extends AppCompatActivity {
         this.searchBar = searchBar;
     }
 
+    public ArrayList<Book> getLastBooksFetched() {
+        return lastBooksFetched;
+    }
+
+    public void setLastBooksFetched(ArrayList<Book> lastBooksFetched) {
+        this.lastBooksFetched = lastBooksFetched;
+    }
+
+    public ArrayList<String> getDescriptionToDisplay() {
+        return descriptionToDisplay;
+    }
+
+    public void setDescriptionToDisplay(ArrayList<String> descriptionToDisplay) {
+        this.descriptionToDisplay = descriptionToDisplay;
+    }
+
+    public ArrayAdapter<String> getListViewAdapter() {
+        return listViewAdapter;
+    }
+
+    public void setListViewAdapter(ArrayAdapter<String> listViewAdapter) {
+        this.listViewAdapter = listViewAdapter;
+    }
 }

@@ -70,6 +70,23 @@ public class PickingActivity extends AppCompatActivity {
     }
 
     private void setListeners(){
+
+        // Quand on appuie sur le bouton, l'application se charge de récupérer la liste des copies
+        // qui sont réservées.
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(checkInternetConnection()){
+                    // http://serveur_url/copies.json?availability=reserved
+                    String url = HttpUtils.SERVER_URL + HttpUtils.COPIES + HttpUtils.JSON +"?"+
+                            HttpUtils.AVAILABIlITY_PARAM + HttpUtils.RESERVED;
+                    // Envoie de la requête au serveur
+                    GetPickingListTask getPickingListTask = new GetPickingListTask();
+                    getPickingListTask.execute(url);
+                }
+            }
+        });
+
         bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,17 +145,19 @@ public class PickingActivity extends AppCompatActivity {
                         // Si oui, on envoie une requête au serveur avec l'id de la copie à supprimer
                         // pour que celui-ci supprime la copie en question de la base de donnée.
                         case DialogInterface.BUTTON_POSITIVE:
-                            // On récupère l'id de la copie a supprimer
-                            String copieId = bookSelected.getCopy().getCopyId();
-                            // On construit l'url de la requête
-                            String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
-                                    + HttpUtils.DELETE + copieId;
-                            // On envoie au serveur la requete de suppression de copie
-                            RemoveCopyTask removeCopyTask = new RemoveCopyTask();
-                            removeCopyTask.execute(url);
-                            // On supprime le livre de la liste pour la cohérence de l'interface
-                            getLastBooksFetched().remove(bookSelected);
-                            fillBookListView(getLastBooksFetched());
+                            if(checkInternetConnection()) {
+                                // On récupère l'id de la copie a supprimer
+                                String copieId = bookSelected.getCopy().getCopyId();
+                                // On construit l'url de la requête
+                                String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
+                                        + HttpUtils.DELETE + copieId;
+                                // On envoie au serveur la requete de suppression de copie
+                                RemoveCopyTask removeCopyTask = new RemoveCopyTask();
+                                removeCopyTask.execute(url);
+                                // On supprime le livre de la liste pour la cohérence de l'interface
+                                getLastBooksFetched().remove(bookSelected);
+                                fillBookListView(getLastBooksFetched());
+                            }
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:

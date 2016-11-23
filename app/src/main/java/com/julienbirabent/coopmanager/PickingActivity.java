@@ -117,7 +117,7 @@ public class PickingActivity extends AppCompatActivity {
 
 
 
-        public PickingDialog(Context context, Book bookSelected) {
+        public PickingDialog(Context context, final Book bookSelected) {
 
             super(context);
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -127,7 +127,17 @@ public class PickingActivity extends AppCompatActivity {
                         // Si oui, on envoie une requête au serveur avec l'id de la copie à supprimer
                         // pour que celui-ci supprime la copie en question de la base de donnée.
                         case DialogInterface.BUTTON_POSITIVE:
-                            //Yes button clicked
+                            // On récupère l'id de la copie a supprimer
+                            String copieId = bookSelected.getCopy().getCopyId();
+                            // On construit l'url de la requête
+                            String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
+                                    + HttpUtils.DELETE + copieId;
+                            // On envoie au serveur la requpete de suppression de copie
+                            RemoveCopyTask removeCopyTask = new RemoveCopyTask();
+                            removeCopyTask.execute(url);
+                            // On supprime le livre de la liste pour la cohérence de l'interface
+                            lastBooksFetched.remove(bookSelected);
+                            fillBookListView(getLastBooksFetched());
                             break;
 
                         case DialogInterface.BUTTON_NEGATIVE:
@@ -157,7 +167,7 @@ public class PickingActivity extends AppCompatActivity {
             // On récupère toutes les copies en attente de reception
             BookHttpClient bookHttpClient = new BookHttpClient();
 
-            // http://URL_SERVER:3000/copies.json?availability=waiting_for_reception
+            // http://URL_SERVER:3000/copies.json?availability=reserved
             String allCopies = bookHttpClient.sendGet(params[0]);
 
 
@@ -207,7 +217,14 @@ public class PickingActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            return null;
+            //Param [0] : url à envoyer pour supprimer la copie.
+
+            //http://url_serveur/copies/delete/*id_copy*
+            BookHttpClient bookHttpClient = new BookHttpClient();
+            String response = bookHttpClient.sendGet(params[0]);
+
+
+            return response;
         }
 
         @Override

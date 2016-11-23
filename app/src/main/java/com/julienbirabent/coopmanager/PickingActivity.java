@@ -56,8 +56,8 @@ public class PickingActivity extends AppCompatActivity {
 
         lastBooksFetched.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
         lastBooksFetched.add(new Book("isbn2", "author2", "title2","price2","nb page2", new Copy("Neuf","Attente reception")));
-
         fillBookListView(lastBooksFetched);
+
 
 
     }
@@ -87,6 +87,9 @@ public class PickingActivity extends AppCompatActivity {
             }
         });
 
+        // Chaque item de la liste est mappé à un objet Book. Sur l'appuie d'un item, on ouvre
+        // un dialogue qui donne la possibilité au manager de supprimer la copie sélectionnée
+        // de la base de donnée de la coop.
         bookList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

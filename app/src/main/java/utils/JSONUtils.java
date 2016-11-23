@@ -10,8 +10,6 @@ import org.json.JSONObject;
 public class JSONUtils {
 
 
-
-
     public static JSONObject getObject(String tagName, JSONObject jsonObject) throws JSONException {
         JSONObject jObj = jsonObject.getJSONObject(tagName);
         return jObj;

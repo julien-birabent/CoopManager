@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -280,5 +282,22 @@ public class PickingActivity extends AppCompatActivity {
 
     public void setLastBooksFetched(ArrayList<Book> lastBooksFetched) {
         this.lastBooksFetched = lastBooksFetched;
+    }
+
+    /**
+     *  Check si la connection internet est présente et active.
+     * @return
+     */
+    private boolean checkInternetConnection() {
+
+        ConnectivityManager cm =
+                (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        return isConnected;
+
     }
 }

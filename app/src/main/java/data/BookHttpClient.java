@@ -35,8 +35,6 @@ public class BookHttpClient {
 
 
         try {
-
-
             HttpURLConnection conn = (HttpURLConnection) (new URL(url)).openConnection();
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
@@ -179,5 +177,25 @@ public class BookHttpClient {
 
     }
 
+    /**
+     * Méthode pour supprimer une ressource de la BD du serveur.
+     * @param url
+     * @return
+     */
+    public String sendDelete(String url){
+
+        try {
+            HttpURLConnection conn = (HttpURLConnection) (new URL(url)).openConnection();
+            conn.setRequestProperty("Content-Type",
+                    "application/x-www-form-urlencoded");
+            conn.setRequestMethod("DELETE");
+            System.out.println(conn.getResponseCode());
+            return Integer.toString(conn.getResponseCode());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        return "Requête non concluante";
+    }
 
 }

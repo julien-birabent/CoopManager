@@ -35,6 +35,7 @@ public class HttpUtils {
     public final static String RESERVED = "reserved";
 
     public final static String DELETE="delete/";
+    public final static String AVAILABIlITY_PARAM= "availability=";
 
 
 

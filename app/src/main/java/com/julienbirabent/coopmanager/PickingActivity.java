@@ -52,7 +52,6 @@ public class PickingActivity extends AppCompatActivity {
         findViewsById();
         setListeners();
 
-
         lastBooksFetched.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
         lastBooksFetched.add(new Book("isbn2", "author2", "title2","price2","nb page2", new Copy("Neuf","Attente reception")));
 
@@ -132,11 +131,11 @@ public class PickingActivity extends AppCompatActivity {
                             // On construit l'url de la requête
                             String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
                                     + HttpUtils.DELETE + copieId;
-                            // On envoie au serveur la requpete de suppression de copie
+                            // On envoie au serveur la requete de suppression de copie
                             RemoveCopyTask removeCopyTask = new RemoveCopyTask();
                             removeCopyTask.execute(url);
                             // On supprime le livre de la liste pour la cohérence de l'interface
-                            lastBooksFetched.remove(bookSelected);
+                            getLastBooksFetched().remove(bookSelected);
                             fillBookListView(getLastBooksFetched());
                             break;
 

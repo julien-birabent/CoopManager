@@ -36,7 +36,6 @@ public class MainActivity  extends AppCompatActivity {
         Intent intent = getIntent();
         sessionManager.setEmail(intent.getStringExtra(LoginActivity.USER_NAME));
         sessionManager.setPassword(intent.getStringExtra(LoginActivity.TOKEN));
-        sessionManager.setId(intent.getStringExtra(LoginActivity.COOPMANAGER_ID));
 
     }
 

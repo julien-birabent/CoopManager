@@ -17,7 +17,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public final static String USER_NAME = "user_name";
     public final static String TOKEN = "token";
-    public final static String COOPMANAGER_ID = "coopmanager_id";
 
     private Button signInButton;
     private EditText userName;
@@ -115,7 +114,6 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 intent.putExtra(USER_NAME, userName.getText().toString());
                 intent.putExtra(TOKEN,token.getText().toString());
-                // intent.putExtra(COOPMANAGER_ID, coopmanagerId);
                 startActivity(intent);
             }
             // On réactive les composants du login

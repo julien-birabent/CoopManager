@@ -28,6 +28,7 @@ import data.JSONCopyParser;
 import model.Book;
 import model.Copy;
 import model.Manager;
+import utils.BookSorter;
 import utils.HttpUtils;
 
 /**
@@ -232,7 +233,11 @@ public class ActivityReception extends AppCompatActivity {
             super.onPostExecute(books);
 
             if(books!= null){
+                // On trie la liste de copies selon les paramètres de recherche du manager.
+                books = BookSorter.sortByExpression(getSearchBar().getText().toString(),books);
+                // On sauvegarde la dernière liste fetched du serveur
                 setLastBooksFetched(books);
+                // On remplis la listeView contenant les descriptions des bouquins
                 fillBookListView(books);
             }
         }

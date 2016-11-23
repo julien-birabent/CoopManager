@@ -28,6 +28,7 @@ import data.JSONBookParser;
 import data.JSONCopyParser;
 import model.Book;
 import model.Copy;
+import utils.BookSorter;
 import utils.HttpUtils;
 
 
@@ -216,6 +217,8 @@ public class PickingActivity extends AppCompatActivity {
             // après avoir récupéré la liste de livre corespondant à la recherche via le serveur, on définit
             // cette liste comme la liste a afficher.
             if(books!=null) {
+                // On trie la liste de copies selon les paramètres de recherche du manager.
+                books = BookSorter.sortByExpression(getSearchBar().getText().toString(),books);
                 // On sauvegarde la dernière liste fetched du serveur
                 setLastBooksFetched(books);
                 // On remplis la listeView contenant les descriptions des bouquins

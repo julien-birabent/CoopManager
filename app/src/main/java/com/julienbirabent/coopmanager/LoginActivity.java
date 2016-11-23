@@ -28,11 +28,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         getViewsById();
-        setOnClickListener();
+        setUIListeners();
 
 
     }
-    private void setOnClickListener(){
+    private void setUIListeners(){
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

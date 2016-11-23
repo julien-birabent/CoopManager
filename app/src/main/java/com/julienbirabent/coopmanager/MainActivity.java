@@ -27,9 +27,12 @@ public class MainActivity  extends AppCompatActivity {
         initActivity();
     }
 
+    /**
+     * Méthode initialisant les composants de l'activité
+     */
     private void initActivity(){
         findViewsById();
-        setOnClickListener();
+        setUIListeners();
 
         // On récupère les attributs du manager qui se connecte à l'application
         // contenues dans l'intent envoyé par LoginActivity
@@ -44,6 +47,10 @@ public class MainActivity  extends AppCompatActivity {
         pickingButton = (Button) findViewById(R.id.picking_button);
     }
 
+    /**
+     *
+     * @return
+     */
     public static Manager getSessionManager(){
 
         if(sessionManager == null){
@@ -52,8 +59,10 @@ public class MainActivity  extends AppCompatActivity {
         return sessionManager;
     }
 
-
-    private void setOnClickListener() {
+    /**
+     * Méthode centralisant la définition des listener du UI
+     */
+    private void setUIListeners() {
 
         // On passe a l'activité permettant de recevoir les livres
         receptionButton.setOnClickListener(new View.OnClickListener() {

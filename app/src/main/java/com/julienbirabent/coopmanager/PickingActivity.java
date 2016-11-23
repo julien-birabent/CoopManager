@@ -52,13 +52,11 @@ public class PickingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_picking);
 
         findViewsById();
-        setListeners();
+        setUIListeners();
 
         lastBooksFetched.add(new Book("isbn", "author", "title","price","nb page", new Copy("Neuf","Attente reception")));
         lastBooksFetched.add(new Book("isbn2", "author2", "title2","price2","nb page2", new Copy("Neuf","Attente reception")));
         fillBookListView(lastBooksFetched);
-
-
 
     }
 
@@ -69,7 +67,7 @@ public class PickingActivity extends AppCompatActivity {
 
     }
 
-    private void setListeners(){
+    private void setUIListeners(){
 
         // Quand on appuie sur le bouton, l'application se charge de récupérer la liste des copies
         // qui sont réservées.

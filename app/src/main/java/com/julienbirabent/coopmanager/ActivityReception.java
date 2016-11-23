@@ -22,7 +22,11 @@ import android.widget.TextView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import data.BookHttpClient;
+import data.JSONBookParser;
+import data.JSONCopyParser;
 import model.Book;
+import model.Copy;
 import model.Manager;
 import utils.HttpUtils;
 
@@ -76,7 +80,7 @@ public class ActivityReception extends AppCompatActivity {
                 Book bookSelected = getLastBooksFetched().get(position);
                 // On ouvre le dialogue pour savoir si le manager veut retirer cette copie de la
                 // liste des copies de la coop
-                ReceptionDialog pickingDialog = new ReceptionDialog(view.getContext(), bookSelected);
+                ReceptionDialog receptionDialog = new ReceptionDialog(view.getContext(), bookSelected);
             }
         });
 
@@ -150,8 +154,20 @@ public class ActivityReception extends AppCompatActivity {
                         // pour que celui-ci modifie l'état en cours de la copie à available
                         case DialogInterface.BUTTON_POSITIVE:
                             if(checkInternetConnection()) {
-                                // Ici on envoie la requête serveur pour changer l'état de disponibilité
-                                // de la copie sélectionné par le manager.
+                                // On récupère l'id de la copie a supprimer
+                                String copieId = bookSelected.getCopy().getCopyId();
+                                // On construit l'url de la requête
+                                /**
+                                 * URL A CHANGER
+                                 */
+                                String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
+                                        + HttpUtils.DELETE + copieId;
+                                // On envoie au serveur la requete de suppression de copie
+                                ChangeCopyAvailityTask changeCopyAvailityTask = new ChangeCopyAvailityTask();
+                                changeCopyAvailityTask.execute(url);
+                                // On supprime le livre de la liste pour la cohérence de l'interface
+                                getLastBooksFetched().remove(bookSelected);
+                                fillBookListView(getLastBooksFetched());
                             }
                             break;
 
@@ -178,16 +194,47 @@ public class ActivityReception extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
         }
 
         @Override
         protected ArrayList<Book> doInBackground(String... params) {
-            return null;
+
+
+            ArrayList<Copy> copiesArrayList = new ArrayList<Copy>();
+            ArrayList<Book> bookArrayList = new ArrayList<Book>();
+            JSONBookParser jsonBookParser = new JSONBookParser();
+            // On récupère toutes les copies en attente de reception
+            BookHttpClient bookHttpClient = new BookHttpClient();
+
+            // http://URL_SERVER:3000/copies.json?availability=waiting_for_reception
+            String allCopies = bookHttpClient.sendGet(params[0]);
+
+            // On convertit les Copy format JSON en objet Copy
+            JSONCopyParser jsonCopyParser = new JSONCopyParser();
+            copiesArrayList = jsonCopyParser.parseManyCopies(allCopies);
+            // Pour chaque copie, on fait une requête dans la BD pour trouver le Book associé
+            // On convertit la description JSON du Book en objet Book et on associe la Copy à ce Book
+            for(int i= 0 ;i<copiesArrayList.size();i++){
+                // http://url_serveur/books/*id_copy*.json
+                String stringBook = bookHttpClient.sendGet(HttpUtils.SERVER_URL + HttpUtils.BOOKS
+                        + copiesArrayList.get(i).getBookId() + HttpUtils.JSON);
+
+                Book book = jsonBookParser.parseBook(stringBook);
+                book.setCopy(copiesArrayList.get(i));
+                bookArrayList.add(book);
+            }
+            return bookArrayList;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Book> books) {
             super.onPostExecute(books);
+
+            if(books!= null){
+                setLastBooksFetched(books);
+                fillBookListView(books);
+            }
         }
     }
 
@@ -203,6 +250,10 @@ public class ActivityReception extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
+
+            BookHttpClient bookHttpClient = new BookHttpClient();
+            String response = bookHttpClient.sendGet(params[0]);
+
             return null;
         }
 

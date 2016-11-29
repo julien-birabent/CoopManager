@@ -30,6 +30,7 @@ import model.Copy;
 import model.Manager;
 import utils.BookSorter;
 import utils.HttpUtils;
+import utils.UrlBuilder;
 
 /**
  * Created by Julien on 2016-11-13.
@@ -51,10 +52,11 @@ public class ActivityReception extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reception);
-
+        // initiliasation de l'activité
         initActivity();
-
     }
+
+
 
     private void setListeners(){
 
@@ -63,7 +65,9 @@ public class ActivityReception extends AppCompatActivity {
             public void onClick(View v) {
                 if(checkInternetConnection()){
                     // Récupérer la liste des copies en attente de réception.
-                    // http://url_serveur/copies.json?availability=waiting_for_reception
+
+                    GetReceptionListTask getReceptionListTask = new GetReceptionListTask();
+                    getReceptionListTask.execute(UrlBuilder.getReceptionListUrl());
 
                 }
             }
@@ -157,15 +161,9 @@ public class ActivityReception extends AppCompatActivity {
                             if(checkInternetConnection()) {
                                 // On récupère l'id de la copie a supprimer
                                 String copieId = bookSelected.getCopy().getCopyId();
-                                // On construit l'url de la requête
-                                /**
-                                 * URL A CHANGER
-                                 */
-                                String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
-                                        + HttpUtils.DELETE + copieId;
                                 // On envoie au serveur la requete de suppression de copie
                                 ChangeCopyAvailityTask changeCopyAvailityTask = new ChangeCopyAvailityTask();
-                                changeCopyAvailityTask.execute(url);
+                                changeCopyAvailityTask.execute(UrlBuilder.receiveCopyUrl(copieId));
                                 // On supprime le livre de la liste pour la cohérence de l'interface
                                 getLastBooksFetched().remove(bookSelected);
                                 fillBookListView(getLastBooksFetched());
@@ -244,7 +242,8 @@ public class ActivityReception extends AppCompatActivity {
     }
 
     /**
-     * Tâche ayant pour but de changer l'attribut availability d'une copie en attente de réception.
+     * Tâche ayant pour but de changer la disponibilité d'une copie après la confirmation de sa
+     * réception par le manager de coop.
      */
     protected class ChangeCopyAvailityTask extends AsyncTask<String,String,String>{
 

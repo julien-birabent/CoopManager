@@ -163,6 +163,8 @@ public class BookHttpClient {
                 stringBuffer.append(line + "\r\n");
             }
 
+            System.out.println("Response GET : " + stringBuffer.toString());
+
             inputStream.close();
             connection.disconnect();
 

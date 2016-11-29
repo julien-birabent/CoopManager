@@ -30,13 +30,15 @@ public class LoginActivity extends AppCompatActivity {
         getViewsById();
         setUIListeners();
 
+        userName.setText("jul.birabent@gmail.com");
+        token.setText("Z92MXpA7JUwtt9xu6VuX");
 
     }
     private void setUIListeners(){
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testGoToStudentActivity();
+
                 // On essaye de se connecter au serveur
                 LoginTask loginTask = new LoginTask();
                 loginTask.execute(new String[]{buildAthentificationUrl()});
@@ -48,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
         signInButton = (Button)findViewById(R.id.signinButton);
         userName = (EditText) findViewById(R.id.usernameId);
         token = (EditText) findViewById(R.id.passwordId);
+
     }
     /**
      * Méthode ou l'on créé l'url permettant d'envoyer la requpete d'authenfication du client.

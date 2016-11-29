@@ -30,6 +30,7 @@ import model.Book;
 import model.Copy;
 import utils.BookSorter;
 import utils.HttpUtils;
+import utils.UrlBuilder;
 
 
 /**
@@ -76,12 +77,9 @@ public class PickingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(checkInternetConnection()){
-                    // http://serveur_url/copies.json?availability=reserved
-                    String url = HttpUtils.SERVER_URL + HttpUtils.COPIES + HttpUtils.JSON +"?"+
-                            HttpUtils.AVAILABIlITY_PARAM + HttpUtils.RESERVED;
                     // Envoie de la requête au serveur
                     GetPickingListTask getPickingListTask = new GetPickingListTask();
-                    getPickingListTask.execute(url);
+                    getPickingListTask.execute(UrlBuilder.getPickingListUrl());
                 }
             }
         });
@@ -150,12 +148,10 @@ public class PickingActivity extends AppCompatActivity {
                             if(checkInternetConnection()) {
                                 // On récupère l'id de la copie a supprimer
                                 String copieId = bookSelected.getCopy().getCopyId();
-                                // On construit l'url de la requête
-                                String url = HttpUtils.SERVER_URL + HttpUtils.COPIES
-                                        + HttpUtils.DELETE + copieId;
+
                                 // On envoie au serveur la requete de suppression de copie
                                 RemoveCopyTask removeCopyTask = new RemoveCopyTask();
-                                removeCopyTask.execute(url);
+                                removeCopyTask.execute(UrlBuilder.deleteCopieUrl(copieId));
                                 // On supprime le livre de la liste pour la cohérence de l'interface
                                 getLastBooksFetched().remove(bookSelected);
                                 fillBookListView(getLastBooksFetched());
@@ -176,6 +172,9 @@ public class PickingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Tâche chargée de récupérer la liste des copies en attente de récupération par les étudiants
+     */
     protected class GetPickingListTask extends AsyncTask<String,String,ArrayList<Book>>{
 
         @Override
